@@ -1,16 +1,42 @@
 import React, { useState } from "react";
 
 function Hook05() {
-    const [inputValue,setInputValue] = useState();
+    const inputValueEmpty = {
+        name: "",
+        age: "",
+        address: "",
+    };
+
+    const [inputValue, setInputValue] = useState(inputValueEmpty);
+
+    // 객체 state일때 이 방법 사용
+    const onChangeHandler = (e) => {
+        const { name, value } = e.target;
+
+        // 함수형 업데이트
+        // 여기서 prev는 이 함수를 실행하는 시점의 가장 최신 상태를 보장함
+        setInputValue((prev) => {
+            return {
+                // 이전 상태 객체를 그대로 복사해서 불변성을 지킨다
+                ...prev,
+                [name]: value,
+            };
+        });
+    };
+
+    const resetOnclick = () => {
+        setInputValue(inputValueEmpty)
+    }
+
     return (
         <div>
-            <h1>이름:</h1>
-            <h1>나이:</h1>
-            <h1>주소:</h1>
-            <input type="text" />
-            <input type="text" />
-            <input type="text" />
-            <button>리셋</button>
+            <h1>이름: {inputValue.name}</h1>    
+            <h1>나이: {inputValue.age}</h1>
+            <h1>주소: {inputValue.address}</h1>
+            <input type="text" value={inputValue.name} name="name" onChange={onChangeHandler} />
+            <input type="text" value={inputValue.age} name="age" onChange={onChangeHandler} />
+            <input type="text" value={inputValue.address} name="address" onChange={onChangeHandler} />
+            <button onClick={resetOnclick}>리셋</button>
         </div>
     );
 }
